@@ -158,7 +158,7 @@ except FileNotFoundError as exc:
 
 team_season = engine.team_season.copy()
 player_data = engine.player_data.copy()
-validation = engine.validation_summary
+validation = engine.validation
 
 available_seasons = sorted(team_season["Season"].unique().tolist())
 default_season = "'15-'16"
@@ -187,8 +187,8 @@ policy = SwapPolicy(
 metric_cols = st.columns(5)
 metric_cols[0].metric("Model LOSO-CV accuracy", f"{validation['accuracy']:.3f}")
 metric_cols[1].metric("Model LOSO-CV F1", f"{validation['f1']:.3f}")
-metric_cols[2].metric("Model AUC", f"{validation.get('auc', float('nan')):.3f}")
-metric_cols[3].metric("Model Brier score", f"{validation.get('brier', float('nan')):.3f}")
+metric_cols[2].metric("Model AUC", f"{validation['auc']:.3f}" if "auc" in validation else "N/A")
+metric_cols[3].metric("Model Brier score", f"{validation['brier']:.3f}" if "brier" in validation else "N/A")
 metric_cols[4].metric("Model feature count", str(len(engine.model_features)))
 
 with st.expander("Model details", expanded=False):
