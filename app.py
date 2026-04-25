@@ -153,10 +153,14 @@ team_season = engine.team_season.copy()
 player_data = engine.player_data.copy()
 
 available_seasons = sorted(team_season["Season"].unique().tolist())
-season = st.selectbox("Season", available_seasons, index=max(len(available_seasons) - 1, 0))
+default_season = "'15-'16"
+season_index = available_seasons.index(default_season) if default_season in available_seasons else max(len(available_seasons) - 1, 0)
+season = st.selectbox("Season", available_seasons, index=season_index)
 
 teams_for_season = sorted(team_season.loc[team_season["Season"] == season, "Team"].unique().tolist())
-team = st.selectbox("Team", teams_for_season)
+default_team = "IND"
+team_index = teams_for_season.index(default_team) if default_team in teams_for_season else 0
+team = st.selectbox("Team", teams_for_season, index=team_index)
 
 positions_for_team = sorted(
     player_data.loc[
