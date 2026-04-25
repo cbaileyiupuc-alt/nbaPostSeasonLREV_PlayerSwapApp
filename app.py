@@ -22,9 +22,11 @@ st.set_page_config(
     layout="wide",
 )
 
+BACKEND_CACHE_VERSION = "threats_v1"
+
 
 @st.cache_resource(show_spinner="Loading model and cleaned roster data...")
-def load_engine(feature_set_name: str, postseason_value_usd: float):
+def load_engine(feature_set_name: str, postseason_value_usd: float, backend_cache_version: str):
     return PostseasonSwapEngine(
         postseason_value_usd=postseason_value_usd,
         feature_set_name=feature_set_name,
@@ -151,7 +153,7 @@ with st.sidebar:
     allow_multi_team = st.checkbox("Allow multi-team replacement candidates", value=False)
 
 try:
-    engine = load_engine(feature_set_name, postseason_value_usd)
+    engine = load_engine(feature_set_name, postseason_value_usd, BACKEND_CACHE_VERSION)
 except FileNotFoundError as exc:
     st.error(str(exc))
     st.stop()
