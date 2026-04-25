@@ -93,25 +93,25 @@ with st.container(border=True):
         info_cols[0].link_button(
             "Open full methodology in Colab",
             methodology_colab_url,
-            use_container_width=True,
+            width="stretch",
         )
     else:
-        info_cols[0].button("Open full methodology in Colab", disabled=True, use_container_width=True)
+        info_cols[0].button("Open full methodology in Colab", disabled=True, width="stretch")
     if judge_colab_url:
         info_cols[1].link_button(
             "Open judge notebook in Colab",
             judge_colab_url,
-            use_container_width=True,
+            width="stretch",
         )
     else:
-        info_cols[1].button("Open judge notebook in Colab", disabled=True, use_container_width=True)
+        info_cols[1].button("Open judge notebook in Colab", disabled=True, width="stretch")
     if readme_bytes:
         info_cols[2].download_button(
             "Download project README",
             data=readme_bytes,
             file_name=readme_path.name,
             mime="text/markdown",
-            use_container_width=True,
+            width="stretch",
         )
     if not methodology_colab_url or not judge_colab_url:
         st.info(
@@ -294,7 +294,7 @@ if section == "Opportunities":
                 "Projected minutes": "{:,.1f}",
             }
         ),
-        use_container_width=True,
+        width="stretch",
     )
 
     chart_cols = st.columns(2)
@@ -318,7 +318,7 @@ if section == "Opportunities":
         )
         .properties(title="EV gain vs salary change", height=360)
     )
-    chart_cols[0].altair_chart(scatter, use_container_width=True)
+    chart_cols[0].altair_chart(scatter, width="stretch")
 
     bar_data = top_swaps.head(10).copy()
     bar_data["label"] = bar_data["incumbent_name"] + " -> " + bar_data["candidate_name"]
@@ -338,7 +338,7 @@ if section == "Opportunities":
         )
         .properties(title="Top 10 swaps by net value", height=360)
     )
-    chart_cols[1].altair_chart(bar, use_container_width=True)
+    chart_cols[1].altair_chart(bar, width="stretch")
 
     st.markdown("### Position vulnerability")
 
@@ -358,7 +358,7 @@ if section == "Opportunities":
                 "Best replacement net value (USD)": "${:,.0f}",
             }
         ),
-        use_container_width=True,
+        width="stretch",
     )
 
     if selected_player:
@@ -382,7 +382,7 @@ if section == "Opportunities":
             roster_position.style.format(
                 {"Salary": "${:,.0f}", "Games": "{:,.0f}", "Total minutes": "{:,.1f}"}
             ),
-            use_container_width=True,
+            width="stretch",
         )
 
     download_cols = st.columns(2)
@@ -400,6 +400,14 @@ if section == "Opportunities":
     )
 
 else:
+    if not hasattr(engine, "analyze_threats"):
+        st.subheader(f"Threats | {team} {season}")
+        st.warning(
+            "This deployed backend does not include the newer Threats analysis yet. "
+            "Push the updated `nba_prescriptive_backend.py` to GitHub and redeploy to enable competitive threats, value threats, and player contribution rankings."
+        )
+        st.stop()
+
     try:
         threat_report = engine.analyze_threats(
             season=season,
@@ -477,7 +485,7 @@ else:
                     "Threat delta salary (USD)": "${:,.0f}",
                 }
             ),
-            use_container_width=True,
+            width="stretch",
         )
 
         if not top_competitive_swaps.empty:
@@ -499,7 +507,7 @@ else:
                     ],
                 )
                 .properties(title="Top competitive threat swaps", height=360),
-                use_container_width=True,
+                width="stretch",
             )
 
     with threat_tabs[1]:
@@ -539,7 +547,7 @@ else:
                     "Threat net value (USD)": "${:,.0f}",
                 }
             ),
-            use_container_width=True,
+            width="stretch",
         )
 
         if not top_value_swaps.empty:
@@ -560,7 +568,7 @@ else:
                 )
                 .properties(title="Top value threat swaps", height=360)
             )
-            st.altair_chart(value_chart, use_container_width=True)
+            st.altair_chart(value_chart, width="stretch")
 
     with threat_tabs[2]:
         st.caption(
@@ -603,7 +611,7 @@ else:
                     "Total minutes": "{:,.1f}",
                 }
             ),
-            use_container_width=True,
+            width="stretch",
         )
 
         if not player_contributions.empty:
@@ -623,7 +631,7 @@ else:
                     ],
                 )
                 .properties(title="Top player contributions", height=360),
-                use_container_width=True,
+                width="stretch",
             )
 
     threat_download_cols = st.columns(3)
