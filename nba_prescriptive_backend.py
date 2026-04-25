@@ -519,6 +519,22 @@ class PostseasonSwapEngine:
         ).copy()
         return candidates
 
+    def build_average_replacement_row(self, season, position, team, roster_names, policy):
+        candidates = self.get_candidate_pool(season, position, team, roster_names, policy)
+        if candidates.empty:
+            return None
+        numeric_cols = candidates.select_dtypes(include=[np.number]).columns.tolist()
+        avg_row = candidates.iloc[0].copy()
+        for col in numeric_cols:
+            avg_row[col] = candidates[col].mean()
+        avg_row["Name"] = f"Average {position} Replacement"
+        avg_row["Team"] = team
+        avg_row["Position"] = position
+        avg_row["prev_teams"] = []
+        avg_row["is_multi_team_season"] = 0
+        avg_row["team_count_in_season"] = 1
+        return avg_row
+
     def simulate_swaps(self, season, team, position, top_n=15, policy=None):
         if policy is None:
             policy = SwapPolicy()
@@ -629,6 +645,133 @@ class PostseasonSwapEngine:
             "top_swaps": swaps.head(top_n).reset_index(drop=True),
             "all_swaps": swaps.reset_index(drop=True),
             "incumbent_vulnerability": incumbent_rankings.reset_index(drop=True),
+        }
+
+    def analyze_threats(self, season, team, top_n=15, policy=None):
+        if policy is None:
+            policy = SwapPolicy()
+
+        source_roster = self.get_team_roster(season, team)
+        target_teams = sorted(t for t in self.team_season.loc[self.team_season["Season"] == season, "Team"].unique() if t != team)
+
+        threat_rows = []
+        contribution_rows = []
+
+        source_roster_names = set(source_roster["Name"].tolist())
+        baseline_source_features = aggregate_team_features(source_roster, team)
+        baseline_source_prob = self.score_team_features(season, baseline_source_features)
+
+        for source_idx, source_player in source_roster.iterrows():
+            player_position = source_player["Position"]
+            player_name = source_player["Name"]
+
+            avg_replacement = self.build_average_replacement_row(season, player_position, team, source_roster_names, policy)
+            if avg_replacement is not None:
+                replaced_roster = source_roster.drop(index=source_idx).copy()
+                avg_row = avg_replacement.copy()
+                avg_row["total_minutes_est"] = source_player["total_minutes_est"]
+                replaced_roster = pd.concat([replaced_roster, avg_row.to_frame().T], ignore_index=True)
+                replacement_features = aggregate_team_features(replaced_roster, team)
+                replacement_prob = self.score_team_features(season, replacement_features)
+                probability_contribution = baseline_source_prob - replacement_prob
+                ev_contribution_usd = probability_contribution * self.postseason_value_usd
+                surplus_value_usd = ev_contribution_usd - float(source_player["Salary"])
+                contribution_rows.append(
+                    {
+                        "season": season,
+                        "team": team,
+                        "player_name": player_name,
+                        "position": player_position,
+                        "baseline_prob": baseline_source_prob,
+                        "replacement_prob": replacement_prob,
+                        "probability_contribution": probability_contribution,
+                        "ev_contribution_usd": ev_contribution_usd,
+                        "surplus_value_usd": surplus_value_usd,
+                        "salary": float(source_player["Salary"]),
+                        "total_minutes": float(source_player["total_minutes_est"]),
+                    }
+                )
+
+            for target_team in target_teams:
+                target_roster = self.get_team_roster(season, target_team)
+                target_incumbents = target_roster[target_roster["Position"] == player_position].copy()
+                if target_incumbents.empty:
+                    continue
+
+                target_baseline_features = aggregate_team_features(target_roster, target_team)
+                target_baseline_prob = self.score_team_features(season, target_baseline_features)
+                target_baseline_ev = target_baseline_prob * self.postseason_value_usd
+
+                for target_idx, target_player in target_incumbents.iterrows():
+                    simulated_roster = target_roster.drop(index=target_idx).copy()
+                    simulated_row = source_player.copy()
+                    simulated_row["Team"] = target_team
+                    simulated_row["total_minutes_est"] = target_player["total_minutes_est"]
+                    simulated_row["prev_teams"] = source_player["prev_teams"] if isinstance(source_player["prev_teams"], list) else []
+                    simulated_roster = pd.concat([simulated_roster, simulated_row.to_frame().T], ignore_index=True)
+
+                    new_features = aggregate_team_features(simulated_roster, target_team)
+                    new_prob = self.score_team_features(season, new_features)
+                    new_ev = new_prob * self.postseason_value_usd
+                    delta_prob = new_prob - target_baseline_prob
+                    delta_ev = new_ev - target_baseline_ev
+                    delta_salary = float(source_player["Salary"] - target_player["Salary"])
+                    net_value = delta_ev - delta_salary
+
+                    threat_rows.append(
+                        {
+                            "season": season,
+                            "source_team": team,
+                            "source_player": player_name,
+                            "source_position": player_position,
+                            "source_salary": float(source_player["Salary"]),
+                            "target_team": target_team,
+                            "replaced_player": target_player["Name"],
+                            "replaced_salary": float(target_player["Salary"]),
+                            "projected_minutes": float(target_player["total_minutes_est"]),
+                            "baseline_target_prob": target_baseline_prob,
+                            "new_target_prob": new_prob,
+                            "delta_prob": delta_prob,
+                            "delta_ev_usd": delta_ev,
+                            "delta_salary_usd": delta_salary,
+                            "net_value_usd": net_value,
+                        }
+                    )
+
+        threat_df = pd.DataFrame(threat_rows)
+        contribution_df = pd.DataFrame(contribution_rows).sort_values(
+            "probability_contribution", ascending=False
+        ).reset_index(drop=True)
+
+        if threat_df.empty:
+            competitive = pd.DataFrame()
+            value = pd.DataFrame()
+            top_competitive_swaps = pd.DataFrame()
+            top_value_swaps = pd.DataFrame()
+        else:
+            competitive = (
+                threat_df.sort_values(["source_player", "delta_prob"], ascending=[True, False])
+                .groupby("source_player", as_index=False)
+                .head(1)
+                .sort_values("delta_prob", ascending=False)
+                .reset_index(drop=True)
+            )
+            value = (
+                threat_df.sort_values(["source_player", "net_value_usd"], ascending=[True, False])
+                .groupby("source_player", as_index=False)
+                .head(1)
+                .sort_values("net_value_usd", ascending=False)
+                .reset_index(drop=True)
+            )
+            top_competitive_swaps = threat_df.sort_values("delta_prob", ascending=False).head(top_n).reset_index(drop=True)
+            top_value_swaps = threat_df.sort_values("net_value_usd", ascending=False).head(top_n).reset_index(drop=True)
+
+        return {
+            "competitive_threats": competitive,
+            "value_threats": value,
+            "top_competitive_swaps": top_competitive_swaps,
+            "top_value_swaps": top_value_swaps,
+            "player_contributions": contribution_df,
         }
 
     def export_swap_report(self, season, team, position, output_path, top_n=15, policy=None):
