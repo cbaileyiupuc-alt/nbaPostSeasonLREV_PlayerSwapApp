@@ -1,0 +1,10 @@
+altair>=6.0
+matplotlib>=3.10
+nbclient>=0.10
+nbformat>=5.10
+numpy<3
+pandas<4
+scikit-learn>=1.8
+statsmodels>=0.14
+streamlit>=1.56
+openpyxl>=3.1
