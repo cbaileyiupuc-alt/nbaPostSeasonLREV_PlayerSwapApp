@@ -5,7 +5,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 import statsmodels.api as sm
-from sklearn.metrics import accuracy_score, confusion_matrix, f1_score, precision_score, recall_score
+from sklearn.metrics import accuracy_score, brier_score_loss, confusion_matrix, f1_score, log_loss, precision_score, recall_score, roc_auc_score
 
 
 PROJECT_DIR = Path(__file__).resolve().parent
@@ -454,6 +454,11 @@ def run_loso_cv(team_season, features):
 
     cv_preds = pd.concat(all_probs, ignore_index=True)
     metrics = summarize_predictions(cv_preds["postseason"].astype(int), cv_preds["pred_prob"])
+    y_true = cv_preds["postseason"].astype(int).to_numpy()
+    y_prob = cv_preds["pred_prob"].astype(float).to_numpy()
+    metrics["auc"] = float(roc_auc_score(y_true, y_prob))
+    metrics["brier"] = float(brier_score_loss(y_true, y_prob))
+    metrics["log_loss"] = float(log_loss(y_true, np.clip(y_prob, 1e-6, 1 - 1e-6)))
     metrics["n_obs"] = int(len(cv_preds))
     metrics["n_folds"] = int(len(seasons))
     metrics["folds"] = fold_rows
