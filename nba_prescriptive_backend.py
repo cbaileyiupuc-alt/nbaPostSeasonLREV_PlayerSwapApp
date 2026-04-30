@@ -439,17 +439,27 @@ def run_loso_cv(team_season, features):
         test_df = team_season[team_season["Season"] == season].copy()
 
         model, _, test_probs, _ = fit_predict(train_df, test_df, features)
+        y_test = test_df["postseason"].astype(int).to_numpy()
+        y_prob = np.asarray(test_probs, dtype=float)
+        y_pred = (y_prob >= 0.5).astype(int)
         fold_rows.append(
             {
                 "season": season,
                 "n_test": int(len(test_df)),
                 "aic_train": float(model.aic),
                 "pseudo_r2_train": float(model.prsquared),
+                "accuracy": float(accuracy_score(y_test, y_pred)),
+                "f1": float(f1_score(y_test, y_pred, zero_division=0)),
+                "actual_rate": float(y_test.mean()),
+                "predicted_rate": float(y_prob.mean()),
+                "brier": float(brier_score_loss(y_test, y_prob)),
+                "auc": float(roc_auc_score(y_test, y_prob)) if len(np.unique(y_test)) > 1 else np.nan,
             }
         )
 
         fold_output = test_df[["Season", "Team", "postseason"]].copy()
         fold_output["pred_prob"] = test_probs
+        fold_output["pred_class"] = y_pred
         all_probs.append(fold_output)
 
     cv_preds = pd.concat(all_probs, ignore_index=True)
@@ -462,6 +472,7 @@ def run_loso_cv(team_season, features):
     metrics["n_obs"] = int(len(cv_preds))
     metrics["n_folds"] = int(len(seasons))
     metrics["folds"] = fold_rows
+    metrics["predictions"] = cv_preds.to_dict(orient="records")
     return metrics
 
 
