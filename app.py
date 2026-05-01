@@ -217,9 +217,7 @@ st.markdown(
     }}
     .stButton > button,
     .stDownloadButton > button,
-    div[data-testid="stPopover"] button,
-    button[kind="secondary"],
-    button[kind="primary"] {{
+    div[data-testid="stPopover"] button {{
         width: 100%;
         border-radius: 4px;
         border: 1.5px solid black !important;
@@ -230,18 +228,14 @@ st.markdown(
     }}
     .stButton > button:hover,
     .stDownloadButton > button:hover,
-    div[data-testid="stPopover"] button:hover,
-    button[kind="secondary"]:hover,
-    button[kind="primary"]:hover {{
+    div[data-testid="stPopover"] button:hover {{
         background: #111111 !important;
         color: white !important;
         border-color: black !important;
     }}
     .stButton > button:focus,
     .stDownloadButton > button:focus,
-    div[data-testid="stPopover"] button:focus,
-    button[kind="secondary"]:focus,
-    button[kind="primary"]:focus {{
+    div[data-testid="stPopover"] button:focus {{
         outline: none !important;
         box-shadow: 0 0 0 1px black !important;
     }}
@@ -349,26 +343,61 @@ st.markdown(
     div[data-testid="stSegmentedControl"] {{
         margin-bottom: 0.75rem;
     }}
-    div[data-testid="stSegmentedControl"] button {{
+    div[data-testid="stSegmentedControl"] button,
+    div[data-testid="stSegmentedControl"] [role="button"] {{
         min-height: 3.1rem !important;
         border-radius: 0 !important;
         border: 1px solid rgba(27, 27, 27, 0.28) !important;
         background: #F6F3EC !important;
         color: var(--text) !important;
+        -webkit-text-fill-color: var(--text) !important;
         font-size: 1rem !important;
         font-weight: 800 !important;
         box-shadow: none !important;
     }}
     div[data-testid="stSegmentedControl"] button[aria-pressed="true"],
-    div[data-testid="stSegmentedControl"] button[kind="primary"] {{
+    div[data-testid="stSegmentedControl"] button[aria-selected="true"],
+    div[data-testid="stSegmentedControl"] button[kind="primary"],
+    div[data-testid="stSegmentedControl"] [role="button"][aria-pressed="true"],
+    div[data-testid="stSegmentedControl"] [role="button"][aria-selected="true"] {{
         background: var(--primary-gold) !important;
         color: white !important;
+        -webkit-text-fill-color: white !important;
         border-color: black !important;
     }}
-    div[data-testid="stSegmentedControl"] button:hover {{
+    div[data-testid="stSegmentedControl"] button:hover,
+    div[data-testid="stSegmentedControl"] [role="button"]:hover {{
         background: #E9E1D1 !important;
         color: var(--text) !important;
+        -webkit-text-fill-color: var(--text) !important;
         border-color: black !important;
+    }}
+    div[data-testid="stSegmentedControl"] button[aria-pressed="true"]:hover,
+    div[data-testid="stSegmentedControl"] button[aria-selected="true"]:hover,
+    div[data-testid="stSegmentedControl"] button[kind="primary"]:hover,
+    div[data-testid="stSegmentedControl"] [role="button"][aria-pressed="true"]:hover,
+    div[data-testid="stSegmentedControl"] [role="button"][aria-selected="true"]:hover {{
+        background: var(--primary-gold) !important;
+        color: white !important;
+        -webkit-text-fill-color: white !important;
+    }}
+    @media (max-width: 700px) {{
+        div[data-testid="stSegmentedControl"] button,
+        div[data-testid="stSegmentedControl"] [role="button"] {{
+            min-height: 2.85rem !important;
+            background: #F6F3EC !important;
+            color: var(--text) !important;
+            -webkit-text-fill-color: var(--text) !important;
+        }}
+        div[data-testid="stSegmentedControl"] button[aria-pressed="true"],
+        div[data-testid="stSegmentedControl"] button[aria-selected="true"],
+        div[data-testid="stSegmentedControl"] button[kind="primary"],
+        div[data-testid="stSegmentedControl"] [role="button"][aria-pressed="true"],
+        div[data-testid="stSegmentedControl"] [role="button"][aria-selected="true"] {{
+            background: var(--primary-gold) !important;
+            color: white !important;
+            -webkit-text-fill-color: white !important;
+        }}
     }}
     .top-nav-row .stButton > button {{
         background: #F6F3EC !important;
