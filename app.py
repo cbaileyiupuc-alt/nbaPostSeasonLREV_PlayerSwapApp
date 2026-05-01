@@ -22,7 +22,7 @@ from nba_prescriptive_backend import (
 
 st.set_page_config(
     page_title="SwapIQ",
-    page_icon="🏀",
+    page_icon=":basketball:",
     layout="wide",
 )
 
@@ -57,8 +57,18 @@ st.markdown(
         color: var(--text);
         font-family: var(--font-ui);
     }}
+    [data-testid="stHeader"] {{
+        background: transparent;
+        height: 0rem;
+    }}
+    [data-testid="stToolbar"] {{
+        display: none;
+    }}
+    #MainMenu {{
+        visibility: hidden;
+    }}
     .block-container {{
-        padding-top: 1.25rem;
+        padding-top: 0.45rem;
         padding-bottom: 2rem;
         max-width: none;
         padding-left: 1.35rem;
@@ -71,8 +81,8 @@ st.markdown(
         background: var(--surface);
         border: 1.5px solid var(--border-strong);
         border-radius: var(--radius);
-        padding: 1.2rem 1.35rem 1.1rem 1.45rem;
-        margin-bottom: 1rem;
+        padding: 1rem 1.25rem 0.95rem 1.35rem;
+        margin-bottom: 0.75rem;
         box-shadow: 0 10px 24px rgba(27, 27, 27, 0.05);
     }}
     .header-kicker {{
@@ -89,24 +99,24 @@ st.markdown(
     }}
     .header-title {{
         font-family: var(--font-display);
-        font-size: 2.35rem;
+        font-size: 2.15rem;
         font-weight: 800;
         line-height: 1.02;
         margin-bottom: 0.2rem;
     }}
     .header-subtitle {{
         color: rgba(27, 27, 27, 0.76);
-        font-size: 0.98rem;
-        line-height: 1.5;
+        font-size: 0.95rem;
+        line-height: 1.42;
         max-width: 58rem;
     }}
     .panel-shell {{
         background: var(--surface);
         border: 1px solid var(--border);
         border-radius: var(--radius);
-        padding: 1rem 1.05rem;
+        padding: 0.8rem 0.9rem;
         box-shadow: 0 8px 18px rgba(27, 27, 27, 0.04);
-        margin-bottom: 1rem;
+        margin-bottom: 0.8rem;
     }}
     .section-label {{
         display: inline-block;
@@ -140,11 +150,49 @@ st.markdown(
         line-height: 1.48;
         color: rgba(27, 27, 27, 0.76);
     }}
+    .summary-card {{
+        background: linear-gradient(180deg, rgba(175, 157, 116, 0.08) 0%, rgba(175, 157, 116, 0.02) 100%), var(--surface);
+        border: 1px solid rgba(27, 27, 27, 0.16);
+        border-radius: var(--radius);
+        padding: 0.9rem 0.95rem;
+        box-shadow: 0 10px 22px rgba(27, 27, 27, 0.05);
+        min-height: 122px;
+    }}
+    .summary-label {{
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-weight: 800;
+        color: rgba(27, 27, 27, 0.58);
+        margin-bottom: 0.35rem;
+    }}
+    .summary-value {{
+        font-size: 1.6rem;
+        font-weight: 800;
+        line-height: 1.08;
+        color: var(--text);
+        margin-bottom: 0.28rem;
+    }}
+    .summary-copy {{
+        font-size: 0.9rem;
+        line-height: 1.46;
+        color: rgba(27, 27, 27, 0.74);
+    }}
+    .page-note {{
+        background: #F7F4ED;
+        border-left: 4px solid var(--primary-gold);
+        border-radius: 4px;
+        padding: 0.55rem 0.75rem;
+        margin: 0.15rem 0 0.75rem 0;
+        color: rgba(27, 27, 27, 0.82);
+        font-size: 0.88rem;
+        line-height: 1.4;
+    }}
     .kpi-card {{
         background: var(--surface);
         border: 1px solid var(--border);
         border-radius: var(--radius);
-        padding: 0.95rem;
+        padding: 0.8rem 0.85rem;
         box-shadow: 0 8px 18px rgba(27, 27, 27, 0.04);
     }}
     .kpi-label {{
@@ -221,19 +269,35 @@ st.markdown(
         background: black !important;
     }}
     .stTabs [data-baseweb="tab-list"] {{
-        gap: 0.35rem;
+        gap: 0;
+        width: 100%;
+        border: 1px solid rgba(27, 27, 27, 0.18);
+        border-radius: 6px;
+        overflow: hidden;
+        background: white;
     }}
     .stTabs [data-baseweb="tab"] {{
-        border-radius: 4px;
-        border: 1px solid var(--border);
-        background: white;
+        flex: 1 1 0;
+        justify-content: center;
+        min-height: 3.2rem;
+        border-radius: 0;
+        border: none;
+        border-right: 1px solid rgba(27, 27, 27, 0.18);
+        background: #F6F3EC;
         font-weight: 700;
-        padding: 0.5rem 0.9rem;
+        font-size: 1rem;
+        padding: 0.8rem 1rem;
+    }}
+    .stTabs [data-baseweb="tab"]:last-child {{
+        border-right: none;
     }}
     .stTabs [aria-selected="true"] {{
         background: var(--primary-gold) !important;
         color: white !important;
-        border-color: black !important;
+        border-right: 1px solid black !important;
+    }}
+    .stTabs [data-baseweb="tab"]:hover {{
+        background: #E9E1D1;
     }}
     div[data-testid="stMetric"] {{
         background: var(--surface);
@@ -262,28 +326,17 @@ st.markdown(
         z-index: 20;
     }}
     .top-nav {{
-        display: flex;
-        gap: 0.55rem;
-        align-items: center;
-        margin: 0.35rem 0 0.95rem 0;
-        padding-bottom: 0.9rem;
-        border-bottom: 1px solid rgba(27, 27, 27, 0.18);
-    }}
-    .top-nav-label {{
-        font-size: 0.78rem;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        font-weight: 800;
-        color: rgba(27, 27, 27, 0.58);
-        margin-right: 0.15rem;
+        margin: 0.05rem 0 0.8rem 0;
+        padding: 0;
+        border-bottom: none;
     }}
     .context-rail {{
         background: var(--surface);
         border: 1px solid var(--border);
         border-radius: var(--radius);
-        padding: 0.9rem 1rem 0.35rem 1rem;
+        padding: 0.7rem 0.9rem 0.2rem 0.9rem;
         box-shadow: 0 8px 18px rgba(27, 27, 27, 0.04);
-        margin-bottom: 1rem;
+        margin-bottom: 0.8rem;
     }}
     .context-title {{
         font-size: 0.78rem;
@@ -293,18 +346,59 @@ st.markdown(
         color: rgba(27, 27, 27, 0.58);
         margin-bottom: 0.45rem;
     }}
-    .top-nav-row .stButton > button {{
-        background: #3F3F3F !important;
-        border-color: #1B1B1B !important;
+    div[data-testid="stSegmentedControl"] {{
+        margin-bottom: 0.75rem;
+    }}
+    div[data-testid="stSegmentedControl"] button {{
+        min-height: 3.1rem !important;
+        border-radius: 0 !important;
+        border: 1px solid rgba(27, 27, 27, 0.28) !important;
+        background: #F6F3EC !important;
+        color: var(--text) !important;
+        font-size: 1rem !important;
+        font-weight: 800 !important;
+        box-shadow: none !important;
+    }}
+    div[data-testid="stSegmentedControl"] button[aria-pressed="true"],
+    div[data-testid="stSegmentedControl"] button[kind="primary"] {{
+        background: var(--primary-gold) !important;
         color: white !important;
-        width: auto !important;
+        border-color: black !important;
+    }}
+    div[data-testid="stSegmentedControl"] button:hover {{
+        background: #E9E1D1 !important;
+        color: var(--text) !important;
+        border-color: black !important;
+    }}
+    .top-nav-row .stButton > button {{
+        background: #F6F3EC !important;
+        border-color: rgba(27, 27, 27, 0.22) !important;
+        color: #1B1B1B !important;
+        width: 100% !important;
+        min-height: 3rem !important;
+        font-size: 1rem !important;
         padding-left: 1rem !important;
         padding-right: 1rem !important;
+        border-radius: 0 !important;
     }}
     .top-nav-row .stButton > button:hover {{
-        background: #2F2F2F !important;
+        background: #E9E1D1 !important;
         border-color: #1B1B1B !important;
-        color: white !important;
+        color: #1B1B1B !important;
+    }}
+    .nav-tab-active {{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 3rem;
+        width: 100%;
+        background: var(--primary-gold);
+        color: white;
+        border: 1.5px solid black;
+        border-radius: 0;
+        font-weight: 800;
+        font-size: 1rem;
+        box-sizing: border-box;
     }}
     </style>
     """,
@@ -323,6 +417,7 @@ def load_engine(feature_set_name: str, postseason_value_usd: float, cache_versio
 def init_state():
     defaults = {
         "active_page": "Model",
+        "nav_page": "Model",
         "feature_set_name": "analyst_positional" if "analyst_positional" in FEATURE_SETS_WITH_SALARY else list(FEATURE_SETS_WITH_SALARY.keys())[0],
         "postseason_value_usd": float(DEFAULT_POSTSEASON_VALUE_USD),
         "top_n": 15,
@@ -370,6 +465,10 @@ def filter_by_position(df: pd.DataFrame, position_filter: str, column_name: str)
     return df[df[column_name] == position_filter].reset_index(drop=True)
 
 
+def format_feature_set_name(name: str) -> str:
+    return name.replace("_", " ").title()
+
+
 def render_kpi_card(column, label: str, value: str, help_text: str):
     column.markdown(
         f"""
@@ -377,6 +476,19 @@ def render_kpi_card(column, label: str, value: str, help_text: str):
             <div class="kpi-label">{label}</div>
             <div class="kpi-value">{value}</div>
             <div class="kpi-help">{help_text}</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+def render_summary_card(column, label: str, value: str, copy: str):
+    column.markdown(
+        f"""
+        <div class="summary-card">
+            <div class="summary-label">{label}</div>
+            <div class="summary-value">{value}</div>
+            <div class="summary-copy">{copy}</div>
         </div>
         """,
         unsafe_allow_html=True,
@@ -410,7 +522,7 @@ def render_model_plot(engine: PostseasonSwapEngine, plot_name: str):
 
     if plot_name == "Confusion matrix":
         cm = np.array([[validation["tn"], validation["fp"]], [validation["fn"], validation["tp"]]])
-        fig, ax = plt.subplots(figsize=(6.8, 6.8))
+        fig, ax = plt.subplots(figsize=(5.8, 5.8))
         ax.set_facecolor(SURFACE)
         cell_colors = np.array([[SECONDARY_GOLD, SURFACE], [SURFACE, SECONDARY_GOLD]], dtype=object)
         for i in range(2):
@@ -445,7 +557,7 @@ def render_model_plot(engine: PostseasonSwapEngine, plot_name: str):
         coef_df = coef_df[coef_df["feature"] != "const"].copy()
         coef_df["abs_coef"] = coef_df["coefficient"].abs()
         coef_df = coef_df.sort_values("abs_coef", ascending=False).reset_index(drop=True)
-        fig, ax = plt.subplots(figsize=(9.5, 6.5))
+        fig, ax = plt.subplots(figsize=(8.0, 5.2))
         ax.barh(coef_df["feature"], coef_df["coefficient"], color=SECONDARY_GOLD, edgecolor="black", linewidth=0.5)
         ax.axvline(0, color="black", linewidth=1.4)
         ax.invert_yaxis()
@@ -492,7 +604,7 @@ def render_model_plot(engine: PostseasonSwapEngine, plot_name: str):
                     alt.Tooltip("lift:Q", title="Lift", format=".2f"),
                 ],
             )
-            .properties(height=360, title="Lift Chart from Held-Out LOSO Predictions")
+            .properties(height=280, title="Lift Chart from Held-Out LOSO Predictions")
         )
         rule = alt.Chart(pd.DataFrame({"y": [1.0]})).mark_rule(color="black", strokeDash=[6, 4]).encode(y="y:Q")
         st.altair_chart(themed_altair(chart + rule), width="stretch")
@@ -522,7 +634,7 @@ def render_model_plot(engine: PostseasonSwapEngine, plot_name: str):
                     alt.Tooltip("n:Q", title="Teams"),
                 ],
             )
-            .properties(height=360, title="Calibration Curve from Held-Out LOSO Predictions")
+            .properties(height=280, title="Calibration Curve from Held-Out LOSO Predictions")
         )
         diagonal = alt.Chart(pd.DataFrame({"x": [0, 1], "y": [0, 1]})).mark_line(color="black", strokeDash=[6, 4]).encode(x="x:Q", y="y:Q")
         st.altair_chart(themed_altair(curve + diagonal), width="stretch")
@@ -540,7 +652,7 @@ def render_model_plot(engine: PostseasonSwapEngine, plot_name: str):
                 y=alt.Y("count():Q", title="Team-seasons"),
                 tooltip=[alt.Tooltip("count():Q", title="Count")],
             )
-            .properties(height=360, title="Distribution of Held-Out Predicted Probabilities")
+            .properties(height=280, title="Distribution of Held-Out Predicted Probabilities")
         )
         st.altair_chart(themed_altair(hist), width="stretch")
         return
@@ -608,7 +720,7 @@ def render_model_plot(engine: PostseasonSwapEngine, plot_name: str):
                 y=alt.Y("accuracy:Q", title="Accuracy", axis=alt.Axis(format=".0%")),
                 tooltip=[alt.Tooltip("season:N", title="Season"), alt.Tooltip("accuracy:Q", title="Accuracy", format=".3f")],
             )
-            .properties(height=360, title="LOSO Accuracy by Season")
+            .properties(height=280, title="LOSO Accuracy by Season")
         )
         st.altair_chart(themed_altair(chart), width="stretch")
         return
@@ -625,7 +737,7 @@ def render_model_plot(engine: PostseasonSwapEngine, plot_name: str):
                 y=alt.Y("auc:Q", title="AUC"),
                 tooltip=[alt.Tooltip("season:N", title="Season"), alt.Tooltip("auc:Q", title="AUC", format=".3f")],
             )
-            .properties(height=360, title="LOSO AUC by Season")
+            .properties(height=280, title="LOSO AUC by Season")
         )
         st.altair_chart(themed_altair(chart), width="stretch")
         return
@@ -639,7 +751,7 @@ def render_model_plot(engine: PostseasonSwapEngine, plot_name: str):
                 y=alt.Y("brier:Q", title="Brier score"),
                 tooltip=[alt.Tooltip("season:N", title="Season"), alt.Tooltip("brier:Q", title="Brier", format=".3f")],
             )
-            .properties(height=360, title="LOSO Brier Score by Season")
+            .properties(height=280, title="LOSO Brier Score by Season")
         )
         st.altair_chart(themed_altair(chart), width="stretch")
         return
@@ -667,7 +779,7 @@ def render_model_plot(engine: PostseasonSwapEngine, plot_name: str):
                     alt.Tooltip("Rate:Q", title="Rate", format=".3f"),
                 ],
             )
-            .properties(height=360, title="Observed vs Predicted Postseason Rate")
+            .properties(height=280, title="Observed vs Predicted Postseason Rate")
         )
         st.altair_chart(themed_altair(chart), width="stretch")
         return
@@ -677,15 +789,15 @@ def render_model_plot(engine: PostseasonSwapEngine, plot_name: str):
             alt.Chart(folds)
             .mark_bar(color=SECONDARY_GOLD, stroke="black", strokeWidth=0.5)
             .encode(
-                x=alt.X("pseudo_r2_train:Q", title="Training pseudo R?"),
+                x=alt.X("pseudo_r2_train:Q", title="Training pseudo R2"),
                 y=alt.Y("season:N", sort="-x", title="Holdout season"),
                 tooltip=[
                     alt.Tooltip("season:N", title="Season"),
-                    alt.Tooltip("pseudo_r2_train:Q", title="Pseudo R?", format=".3f"),
+                    alt.Tooltip("pseudo_r2_train:Q", title="Pseudo R2", format=".3f"),
                     alt.Tooltip("aic_train:Q", title="Train AIC", format=".1f"),
                 ],
             )
-            .properties(height=360, title="Training Fit During LOSO-CV")
+            .properties(height=280, title="Training Fit During LOSO-CV")
         )
         st.altair_chart(themed_altair(chart), width="stretch")
         return
@@ -763,7 +875,7 @@ def render_header_and_settings(engine: PostseasonSwapEngine):
         settings_box = st.container()
         with settings_box:
             st.markdown('<div class="settings-anchor"></div>', unsafe_allow_html=True)
-        with st.popover("☰ Search Settings", width="stretch"):
+        with st.popover("Search Settings", width="stretch"):
             st.caption("Shared search and business settings")
             st.number_input(
                 "Postseason value (USD)",
@@ -793,35 +905,35 @@ def render_header_and_settings(engine: PostseasonSwapEngine):
 
 
 def render_top_navigation():
-    st.markdown(
-        """
-        <div class="top-nav">
-            <div class="top-nav-label">Navigate</div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-    nav_cols = st.columns([1, 1, 1, 6], gap="small")
-    with nav_cols[0]:
-        st.markdown('<div class="top-nav-row">', unsafe_allow_html=True)
-        if st.button("Model", key="nav_model"):
-            st.session_state["active_page"] = "Model"
+    st.markdown('<div class="top-nav">', unsafe_allow_html=True)
+    pages = ["Model", "Threats", "Opportunities"]
+    if st.session_state.get("nav_page") not in pages:
+        st.session_state["nav_page"] = st.session_state["active_page"] if st.session_state["active_page"] in pages else "Model"
+    if hasattr(st, "segmented_control"):
+        selected_page = st.segmented_control(
+            "Primary navigation",
+            options=pages,
+            key="nav_page",
+            label_visibility="collapsed",
+            width="stretch",
+        )
+        if selected_page in pages and selected_page != st.session_state["active_page"]:
+            st.session_state["active_page"] = selected_page
             st.rerun()
-        st.markdown("</div>", unsafe_allow_html=True)
-    with nav_cols[1]:
-        st.markdown('<div class="top-nav-row">', unsafe_allow_html=True)
-        if st.button("Threats", key="nav_threats"):
-            st.session_state["active_page"] = "Threats"
-            st.rerun()
-        st.markdown("</div>", unsafe_allow_html=True)
-    with nav_cols[2]:
-        st.markdown('<div class="top-nav-row">', unsafe_allow_html=True)
-        if st.button("Opportunities", key="nav_opportunities"):
-            st.session_state["active_page"] = "Opportunities"
-            st.rerun()
-        st.markdown("</div>", unsafe_allow_html=True)
-    with nav_cols[3]:
-        st.caption(f"Current page: {st.session_state['active_page']}")
+    else:
+        nav_cols = st.columns(3, gap="small")
+        for col, page_name in zip(nav_cols, pages):
+            with col:
+                if st.session_state["active_page"] == page_name:
+                    st.markdown(f'<div class="nav-tab-active">{page_name}</div>', unsafe_allow_html=True)
+                else:
+                    st.markdown('<div class="top-nav-row">', unsafe_allow_html=True)
+                    if st.button(page_name, key=f"nav_{page_name.lower()}"):
+                        st.session_state["active_page"] = page_name
+                        st.session_state["nav_page"] = page_name
+                        st.rerun()
+                    st.markdown("</div>", unsafe_allow_html=True)
+    st.markdown("</div>", unsafe_allow_html=True)
 
 
 def render_context_rail(engine: PostseasonSwapEngine):
@@ -835,17 +947,18 @@ def render_context_rail(engine: PostseasonSwapEngine):
     if st.session_state["team"] not in teams_for_season:
         st.session_state["team"] = "IND" if "IND" in teams_for_season else teams_for_season[0]
 
-    st.markdown('<div class="context-title">Search Context</div>', unsafe_allow_html=True)
-    rail_cols = st.columns([1, 1, 6], gap="small")
-    with rail_cols[0]:
-        st.selectbox("Season", available_seasons, key="season")
-    with rail_cols[1]:
-        refreshed_teams = sorted(
-            engine.team_season.loc[engine.team_season["Season"] == st.session_state["season"], "Team"].unique().tolist()
-        )
-        if st.session_state["team"] not in refreshed_teams:
-            st.session_state["team"] = "IND" if "IND" in refreshed_teams else refreshed_teams[0]
-        st.selectbox("Team", refreshed_teams, key="team")
+    with st.container(border=True):
+        st.markdown('<div class="context-title">Search Context</div>', unsafe_allow_html=True)
+        rail_cols = st.columns([1, 1, 6], gap="small")
+        with rail_cols[0]:
+            st.selectbox("Season", available_seasons, key="season")
+        with rail_cols[1]:
+            refreshed_teams = sorted(
+                engine.team_season.loc[engine.team_season["Season"] == st.session_state["season"], "Team"].unique().tolist()
+            )
+            if st.session_state["team"] not in refreshed_teams:
+                st.session_state["team"] = "IND" if "IND" in refreshed_teams else refreshed_teams[0]
+            st.selectbox("Team", refreshed_teams, key="team")
 
 
 def render_model_page(engine: PostseasonSwapEngine):
@@ -854,53 +967,40 @@ def render_model_page(engine: PostseasonSwapEngine):
     if st.session_state["model_plot"] not in available_plots:
         st.session_state["model_plot"] = available_plots[0]
     st.markdown('<div class="section-label">Model Overview</div>', unsafe_allow_html=True)
-    st.subheader("Validation snapshot and model diagnostics")
-
-    top_row = st.columns(3)
-    top_row[0].markdown(
-        f"""
-        <div class="mini-card">
-            <h4>What this page owns</h4>
-            <p>The model page centralizes validation results, active feature-set selection, and performance plot generation.</p>
-        </div>
-        """,
+    st.subheader("Model diagnostics")
+    st.markdown(
+        '<div class="page-note">Use this page to check whether the probability engine is stable enough to support roster decisions before turning it into swap recommendations.</div>',
         unsafe_allow_html=True,
     )
-    top_row[1].markdown(
-        f"""
-        <div class="mini-card">
-            <h4>Active feature set</h4>
-            <p><strong>{st.session_state['feature_set_name']}</strong> with <strong>{len(engine.model_features)}</strong> predictors.</p>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-    top_row[2].markdown(
-        f"""
-        <div class="mini-card">
-            <h4>Business value assumption</h4>
-            <p>Expected postseason success is currently priced at <strong>{format_currency(st.session_state['postseason_value_usd'])}</strong>.</p>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
+    control_cols = st.columns([2.4, 1.6], gap="large")
+    with control_cols[0]:
+        st.selectbox(
+            "Model feature set",
+            options=list(FEATURE_SETS_WITH_SALARY.keys()),
+            index=list(FEATURE_SETS_WITH_SALARY.keys()).index(st.session_state["feature_set_name"]),
+            format_func=format_feature_set_name,
+            key="feature_set_name",
+            help="Changing the feature set reloads the scoring model for all pages.",
+        )
+    with control_cols[1]:
+        st.markdown(
+            f"""
+            <div class="summary-card" style="min-height:88px;padding:0.75rem 0.85rem;">
+                <div class="summary-label">Current model</div>
+                <div class="summary-value" style="font-size:1.15rem;">{len(engine.model_features)} standardized features</div>
+                <div class="summary-copy">{format_feature_set_name(st.session_state["feature_set_name"])}</div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
 
-    st.session_state["feature_set_name"] = st.selectbox(
-        "Model feature set",
-        options=list(FEATURE_SETS_WITH_SALARY.keys()),
-        index=list(FEATURE_SETS_WITH_SALARY.keys()).index(st.session_state["feature_set_name"]),
-        help="Changing the feature set reloads the scoring model for all pages.",
-    )
-
-    metric_cols = st.columns(5)
+    metric_cols = st.columns(4)
     render_kpi_card(metric_cols[0], "LOSO Accuracy", f"{validation['accuracy']:.3f}", "Held-out season classification accuracy")
     render_kpi_card(metric_cols[1], "LOSO F1", f"{validation['f1']:.3f}", "Balance of precision and recall")
     render_kpi_card(metric_cols[2], "AUC", f"{validation['auc']:.3f}" if "auc" in validation else "N/A", "Ranking quality for postseason probability")
     render_kpi_card(metric_cols[3], "Brier", f"{validation['brier']:.3f}" if "brier" in validation else "N/A", "Probability calibration error")
-    render_kpi_card(metric_cols[4], "Features", str(len(engine.model_features)), "Active predictors in the model")
 
-    st.markdown("---")
-    plot_cols = st.columns([1.2, 3.8], gap="large")
+    plot_cols = st.columns([1.05, 3.2], gap="large")
     with plot_cols[0]:
         st.markdown('<div class="section-label">Plot Generator</div>', unsafe_allow_html=True)
         st.selectbox(
@@ -913,10 +1013,12 @@ def render_model_page(engine: PostseasonSwapEngine):
             st.write("LOSO-CV confusion matrix:", [[validation["tn"], validation["fp"]], [validation["fn"], validation["tp"]]])
 
     with plot_cols[1]:
-        st.markdown('<div class="panel-shell">', unsafe_allow_html=True)
-        st.caption(MODEL_PLOT_NOTES.get(st.session_state["model_plot"], ""))
-        render_model_plot(engine, st.session_state["model_plot"])
-        st.markdown("</div>", unsafe_allow_html=True)
+        with st.container(border=True):
+            st.markdown(
+                f'<div class="summary-copy" style="margin-bottom:0.55rem;">{MODEL_PLOT_NOTES.get(st.session_state["model_plot"], "")}</div>',
+                unsafe_allow_html=True,
+            )
+            render_model_plot(engine, st.session_state["model_plot"])
 
 
 def render_opportunities_page(engine: PostseasonSwapEngine, player_data: pd.DataFrame):
@@ -940,6 +1042,10 @@ def render_opportunities_page(engine: PostseasonSwapEngine, player_data: pd.Data
 
     st.markdown('<div class="section-label">Opportunities</div>', unsafe_allow_html=True)
     st.subheader(f"Opportunity scan | {team} {season} | {position}")
+    st.markdown(
+        '<div class="page-note">Use this page to find realistic same-position upgrades, then compare probability lift, expected value, and salary impact.</div>',
+        unsafe_allow_html=True,
+    )
 
     kpi_cols = st.columns(2)
     render_kpi_card(kpi_cols[0], "Baseline probability", format_percent(baseline["baseline_prob"]), "Current postseason probability before any simulated swap")
@@ -953,6 +1059,38 @@ def render_opportunities_page(engine: PostseasonSwapEngine, player_data: pd.Data
         top_swaps = top_swaps[top_swaps["incumbent_name"] == selected_player].reset_index(drop=True)
         all_swaps = all_swaps[all_swaps["incumbent_name"] == selected_player].reset_index(drop=True)
         incumbent_vulnerability = incumbent_vulnerability[incumbent_vulnerability["incumbent_name"] == selected_player].reset_index(drop=True)
+
+    summary_cols = st.columns(3, gap="large")
+    if not top_swaps.empty:
+        best_net = top_swaps.sort_values("net_value_usd", ascending=False).iloc[0]
+        best_prob = top_swaps.sort_values("delta_prob", ascending=False).iloc[0]
+        render_summary_card(
+            summary_cols[0],
+            "Best value swap",
+            f"{best_net['incumbent_name']} -> {best_net['candidate_name']}",
+            f"Adds {format_currency(best_net['net_value_usd'])} of net value with a {best_net['delta_prob']:.2%} probability lift.",
+        )
+        render_summary_card(
+            summary_cols[1],
+            "Biggest playoff lift",
+            f"{best_prob['delta_prob']:.2%}",
+            f"{best_prob['incumbent_name']} -> {best_prob['candidate_name']} creates the largest raw postseason-probability gain.",
+        )
+    else:
+        render_summary_card(summary_cols[0], "Best value swap", "No valid swaps", "The current filters leave no eligible candidate set.")
+        render_summary_card(summary_cols[1], "Biggest playoff lift", "No valid swaps", "Relax the candidate filters or choose another position.")
+
+    if not incumbent_vulnerability.empty:
+        vuln_sorted = incumbent_vulnerability.sort_values("best_net_value_usd", ascending=False)
+        vuln_row = vuln_sorted.iloc[0]
+        render_summary_card(
+            summary_cols[2],
+            "Most vulnerable incumbent",
+            vuln_row["incumbent_name"],
+            f"Best available replacement is worth {format_currency(vuln_row['best_net_value_usd'])} under the current assumptions.",
+        )
+    else:
+        render_summary_card(summary_cols[2], "Most vulnerable incumbent", "Unavailable", "No incumbent vulnerability estimates were produced for this context.")
 
     display_swaps = top_swaps[
         [
@@ -984,23 +1122,11 @@ def render_opportunities_page(engine: PostseasonSwapEngine, player_data: pd.Data
             "candidate_total_minutes_projected": "Projected minutes",
         }
     )
-    st.dataframe(
-        display_swaps.style.format(
-            {
-                "Delta probability": "{:.4%}",
-                "Delta EV (USD)": "${:,.0f}",
-                "Delta salary (USD)": "${:,.0f}",
-                "Net value (USD)": "${:,.0f}",
-                "Projected minutes": "{:,.1f}",
-            }
-        ),
-        width="stretch",
-    )
-
+    st.markdown("### Opportunity visuals")
     chart_cols = st.columns(2)
     scatter = (
         alt.Chart(top_swaps.copy())
-        .mark_circle(size=90)
+        .mark_circle(size=70)
         .encode(
             x=alt.X("delta_salary_usd:Q", title="Delta salary (USD)"),
             y=alt.Y("delta_ev_usd:Q", title="Delta EV (USD)"),
@@ -1019,7 +1145,7 @@ def render_opportunities_page(engine: PostseasonSwapEngine, player_data: pd.Data
                 alt.Tooltip("net_value_usd:Q", title="Net value", format=",.0f"),
             ],
         )
-        .properties(title="EV gain vs salary change", height=340)
+        .properties(title="EV gain vs salary change", height=260)
     )
     chart_cols[0].altair_chart(themed_altair(scatter), width="stretch")
 
@@ -1038,9 +1164,23 @@ def render_opportunities_page(engine: PostseasonSwapEngine, player_data: pd.Data
                 alt.Tooltip("delta_salary_usd:Q", title="Delta salary", format=",.0f"),
             ],
         )
-        .properties(title="Top swaps by net value", height=340)
+        .properties(title="Top swaps by net value", height=260)
     )
     chart_cols[1].altair_chart(themed_altair(bar), width="stretch")
+
+    st.markdown("### Ranked swap table")
+    st.dataframe(
+        display_swaps.style.format(
+            {
+                "Delta probability": "{:.4%}",
+                "Delta EV (USD)": "${:,.0f}",
+                "Delta salary (USD)": "${:,.0f}",
+                "Net value (USD)": "${:,.0f}",
+                "Projected minutes": "{:,.1f}",
+            }
+        ),
+        width="stretch",
+    )
 
     st.markdown("### Position vulnerability")
     vuln_display = incumbent_vulnerability.rename(
@@ -1102,21 +1242,75 @@ def render_threats_page(engine: PostseasonSwapEngine, player_data: pd.DataFrame)
 
     value_threats = filter_by_position(threat_report["value_threats"], threat_position_filter, "source_position")
     top_competitive_swaps = filter_by_position(threat_report["top_competitive_swaps"], threat_position_filter, "source_position").head(st.session_state["top_n"])
+    full_competitive_threats = filter_by_position(threat_report["competitive_threats"], threat_position_filter, "source_position")
     top_value_swaps = filter_by_position(threat_report["top_value_swaps"], threat_position_filter, "source_position").head(st.session_state["top_n"])
     player_contributions = filter_by_position(threat_report["player_contributions"], threat_position_filter, "position")
 
     st.markdown('<div class="section-label">Threats</div>', unsafe_allow_html=True)
     st.subheader(f"Threat scan | {team} {season}")
+    st.markdown(
+        '<div class="page-note">Use this page to see which players are most valuable to keep. Competitive threat measures another team\'s probability gain; value threat converts that gain into net expected value.</div>',
+        unsafe_allow_html=True,
+    )
+
+    threat_summary_cols = st.columns(3, gap="large")
+    if not top_competitive_swaps.empty:
+        top_comp = top_competitive_swaps.sort_values("delta_prob", ascending=False).iloc[0]
+        render_summary_card(
+            threat_summary_cols[0],
+            "Top competitive threat",
+            top_comp["source_player"],
+            f"{top_comp['target_team']} gains {top_comp['delta_prob']:.2%} in postseason probability by taking him.",
+        )
+    else:
+        render_summary_card(
+            threat_summary_cols[0],
+            "Top competitive threat",
+            "Unavailable",
+            "No competitive threat scenarios survived the current filters.",
+        )
+
+    if not top_value_swaps.empty:
+        top_value = top_value_swaps.sort_values("net_value_usd", ascending=False).iloc[0]
+        render_summary_card(
+            threat_summary_cols[1],
+            "Top value threat",
+            top_value["source_player"],
+            f"{top_value['target_team']} gains {format_currency(top_value['net_value_usd'])} of net value under the current assumptions.",
+        )
+    else:
+        render_summary_card(
+            threat_summary_cols[1],
+            "Top value threat",
+            "Unavailable",
+            "No value threat scenarios survived the current filters.",
+        )
+
+    if not player_contributions.empty:
+        top_contributor = player_contributions.sort_values("probability_contribution", ascending=False).iloc[0]
+        render_summary_card(
+            threat_summary_cols[2],
+            "Most important current player",
+            top_contributor["player_name"],
+            f"Estimated to contribute {top_contributor['probability_contribution']:.2%} of team postseason probability versus an average same-position replacement.",
+        )
+    else:
+        render_summary_card(
+            threat_summary_cols[2],
+            "Most important current player",
+            "Unavailable",
+            "Contribution estimates were not available for this context.",
+        )
 
     threat_tabs = st.tabs(["Competitive", "Value"])
 
     with threat_tabs[0]:
         st.caption(
             "Contribution is measured against an average same-position external replacement. "
-            "The competitive threat columns show where another team gains the most probability by taking that player."
+            "Threat columns populate only when another team improves under the current filters."
         )
         competitive_columns = (
-            top_competitive_swaps.sort_values("delta_prob", ascending=False)
+            full_competitive_threats.sort_values("delta_prob", ascending=False)
             .drop_duplicates("source_player")
             .loc[:, ["source_player", "target_team", "replaced_player", "delta_prob"]]
             .rename(
@@ -1129,6 +1323,9 @@ def render_threats_page(engine: PostseasonSwapEngine, player_data: pd.DataFrame)
             )
         )
         competitive_contribution = player_contributions.merge(competitive_columns, on="player_name", how="left")
+        competitive_contribution["best_threatened_team"] = competitive_contribution["best_threatened_team"].fillna("No eligible threat")
+        competitive_contribution["best_replaced_player"] = competitive_contribution["best_replaced_player"].fillna("No eligible threat")
+        competitive_contribution["best_threat_delta_probability"] = competitive_contribution["best_threat_delta_probability"].fillna(0.0)
         threat_summary = competitive_contribution[
             [
                 "player_name",
@@ -1184,7 +1381,7 @@ def render_threats_page(engine: PostseasonSwapEngine, player_data: pd.DataFrame)
                         alt.Tooltip("delta_prob:Q", title="Delta prob", format=".4%"),
                     ],
                 )
-                .properties(title="Top competitive threat swaps", height=340)
+                .properties(title="Top competitive threat swaps", height=260)
             )
             st.altair_chart(themed_altair(chart), width="stretch")
 
@@ -1216,9 +1413,29 @@ def render_threats_page(engine: PostseasonSwapEngine, player_data: pd.DataFrame)
             width="stretch",
         )
         if not top_value_swaps.empty:
+            threat_map = (
+                alt.Chart(top_value_swaps.copy())
+                .mark_circle(size=85, opacity=0.9, stroke="black", strokeWidth=0.6)
+                .encode(
+                    x=alt.X("delta_prob:Q", title="Probability gain for other team"),
+                    y=alt.Y("net_value_usd:Q", title="Net EV gain for other team (USD)"),
+                    color=alt.Color(
+                        "source_position:N",
+                        title="Position",
+                        scale=alt.Scale(domain=["PG", "SG", "SF", "PF", "C"], range=[PRIMARY_GOLD, SECONDARY_GOLD, MUTED, "#C9C9C9", "#5F5F5F"]),
+                    ),
+                    tooltip=[
+                        alt.Tooltip("source_player:N", title="Our player"),
+                        alt.Tooltip("target_team:N", title="Threatened team"),
+                        alt.Tooltip("delta_prob:Q", title="Delta probability", format=".4%"),
+                        alt.Tooltip("net_value_usd:Q", title="Net value", format=",.0f"),
+                    ],
+                )
+                .properties(title="Threat map: competitive impact vs value impact", height=255)
+            )
             chart = (
                 alt.Chart(top_value_swaps.head(10))
-                .mark_circle(size=90)
+                .mark_circle(size=70)
                 .encode(
                     x=alt.X("delta_salary_usd:Q", title="Salary change for other team (USD)"),
                     y=alt.Y("net_value_usd:Q", title="Net EV gain for other team (USD)"),
@@ -1233,9 +1450,11 @@ def render_threats_page(engine: PostseasonSwapEngine, player_data: pd.DataFrame)
                         alt.Tooltip("net_value_usd:Q", title="Net value", format=",.0f"),
                     ],
                 )
-                .properties(title="Top value threat swaps", height=340)
+                .properties(title="Top value threat swaps", height=260)
             )
-            st.altair_chart(themed_altair(chart), width="stretch")
+            threat_chart_cols = st.columns(2, gap="large")
+            threat_chart_cols[0].altair_chart(themed_altair(threat_map), width="stretch")
+            threat_chart_cols[1].altair_chart(themed_altair(chart), width="stretch")
 
 
 def main():
