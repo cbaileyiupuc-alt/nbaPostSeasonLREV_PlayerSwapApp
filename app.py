@@ -522,27 +522,30 @@ def render_model_plot(engine: PostseasonSwapEngine, plot_name: str):
 
     if plot_name == "Confusion matrix":
         cm = np.array([[validation["tn"], validation["fp"]], [validation["fn"], validation["tp"]]])
-        fig, ax = plt.subplots(figsize=(4.7, 4.7))
+        fig, ax = plt.subplots(figsize=(3.8, 3.8))
         ax.set_facecolor(SURFACE)
         cell_colors = np.array([[SECONDARY_GOLD, SURFACE], [SURFACE, SECONDARY_GOLD]], dtype=object)
         for i in range(2):
             for j in range(2):
                 rect = plt.Rectangle((j - 0.5, i - 0.5), 1, 1, facecolor=cell_colors[i, j], edgecolor="black", linewidth=1.5)
                 ax.add_patch(rect)
-                ax.text(j, i, f"{cm[i, j]}", ha="center", va="center", fontsize=18, fontweight="bold", color="black")
+                ax.text(j, i, f"{cm[i, j]}", ha="center", va="center", fontsize=15, fontweight="bold", color="black")
         ax.set_xlim(-0.5, 1.5)
         ax.set_ylim(1.5, -0.5)
         ax.set_xticks([0, 1])
         ax.set_yticks([0, 1])
         ax.set_xticklabels(["Predicted No", "Predicted Yes"], fontweight="bold")
         ax.set_yticklabels(["Actual No", "Actual Yes"], fontweight="bold")
-        ax.set_title("LOSO-CV Confusion Matrix", fontsize=16, fontweight="bold", pad=10)
+        ax.set_title("LOSO-CV Confusion Matrix", fontsize=14, fontweight="bold", pad=8)
         for spine in ax.spines.values():
             spine.set_linewidth(1.5)
             spine.set_color("black")
         ax.tick_params(length=0)
         fig.patch.set_facecolor(SURFACE)
-        st.pyplot(fig, width="stretch")
+        fig.tight_layout(pad=0.6)
+        plot_col, _ = st.columns([1.35, 2.65], gap="small")
+        with plot_col:
+            st.pyplot(fig, width="content")
         plt.close(fig)
         return
 
