@@ -324,6 +324,46 @@ st.markdown(
         padding: 0;
         border-bottom: none;
     }}
+    .nav-strip {{
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        width: 100%;
+        border: 1.5px solid black;
+        border-radius: 4px;
+        overflow: hidden;
+        background: var(--surface);
+        margin-bottom: 0.75rem;
+    }}
+    .nav-link {{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 3.05rem;
+        padding: 0.75rem 0.9rem;
+        background: #F6F3EC;
+        color: var(--text) !important;
+        -webkit-text-fill-color: var(--text) !important;
+        text-decoration: none !important;
+        font-size: 1rem;
+        font-weight: 800;
+        border-right: 1px solid rgba(27, 27, 27, 0.28);
+        box-sizing: border-box;
+    }}
+    .nav-link:last-child {{
+        border-right: none;
+    }}
+    .nav-link:hover {{
+        background: #E9E1D1;
+        color: var(--text) !important;
+        -webkit-text-fill-color: var(--text) !important;
+        text-decoration: none !important;
+    }}
+    .nav-link-active,
+    .nav-link-active:hover {{
+        background: var(--primary-gold);
+        color: white !important;
+        -webkit-text-fill-color: white !important;
+    }}
     .context-rail {{
         background: var(--surface);
         border: 1px solid var(--border);
@@ -339,65 +379,6 @@ st.markdown(
         font-weight: 800;
         color: rgba(27, 27, 27, 0.58);
         margin-bottom: 0.45rem;
-    }}
-    div[data-testid="stSegmentedControl"] {{
-        margin-bottom: 0.75rem;
-    }}
-    div[data-testid="stSegmentedControl"] button,
-    div[data-testid="stSegmentedControl"] [role="button"] {{
-        min-height: 3.1rem !important;
-        border-radius: 0 !important;
-        border: 1px solid rgba(27, 27, 27, 0.28) !important;
-        background: #F6F3EC !important;
-        color: var(--text) !important;
-        -webkit-text-fill-color: var(--text) !important;
-        font-size: 1rem !important;
-        font-weight: 800 !important;
-        box-shadow: none !important;
-    }}
-    div[data-testid="stSegmentedControl"] button[aria-pressed="true"],
-    div[data-testid="stSegmentedControl"] button[aria-selected="true"],
-    div[data-testid="stSegmentedControl"] button[kind="primary"],
-    div[data-testid="stSegmentedControl"] [role="button"][aria-pressed="true"],
-    div[data-testid="stSegmentedControl"] [role="button"][aria-selected="true"] {{
-        background: var(--primary-gold) !important;
-        color: white !important;
-        -webkit-text-fill-color: white !important;
-        border-color: black !important;
-    }}
-    div[data-testid="stSegmentedControl"] button:hover,
-    div[data-testid="stSegmentedControl"] [role="button"]:hover {{
-        background: #E9E1D1 !important;
-        color: var(--text) !important;
-        -webkit-text-fill-color: var(--text) !important;
-        border-color: black !important;
-    }}
-    div[data-testid="stSegmentedControl"] button[aria-pressed="true"]:hover,
-    div[data-testid="stSegmentedControl"] button[aria-selected="true"]:hover,
-    div[data-testid="stSegmentedControl"] button[kind="primary"]:hover,
-    div[data-testid="stSegmentedControl"] [role="button"][aria-pressed="true"]:hover,
-    div[data-testid="stSegmentedControl"] [role="button"][aria-selected="true"]:hover {{
-        background: var(--primary-gold) !important;
-        color: white !important;
-        -webkit-text-fill-color: white !important;
-    }}
-    @media (max-width: 700px) {{
-        div[data-testid="stSegmentedControl"] button,
-        div[data-testid="stSegmentedControl"] [role="button"] {{
-            min-height: 2.85rem !important;
-            background: #F6F3EC !important;
-            color: var(--text) !important;
-            -webkit-text-fill-color: var(--text) !important;
-        }}
-        div[data-testid="stSegmentedControl"] button[aria-pressed="true"],
-        div[data-testid="stSegmentedControl"] button[aria-selected="true"],
-        div[data-testid="stSegmentedControl"] button[kind="primary"],
-        div[data-testid="stSegmentedControl"] [role="button"][aria-pressed="true"],
-        div[data-testid="stSegmentedControl"] [role="button"][aria-selected="true"] {{
-            background: var(--primary-gold) !important;
-            color: white !important;
-            -webkit-text-fill-color: white !important;
-        }}
     }}
     .top-nav-row .stButton > button {{
         background: #F6F3EC !important;
@@ -428,6 +409,28 @@ st.markdown(
         font-weight: 800;
         font-size: 1rem;
         box-sizing: border-box;
+    }}
+    @media (max-width: 700px) {{
+        .nav-strip {{
+            grid-template-columns: 1fr;
+        }}
+        .nav-link {{
+            min-height: 2.75rem;
+            border-right: none;
+            border-bottom: 1px solid rgba(27, 27, 27, 0.28);
+            background: #F6F3EC !important;
+            color: var(--text) !important;
+            -webkit-text-fill-color: var(--text) !important;
+        }}
+        .nav-link:last-child {{
+            border-bottom: none;
+        }}
+        .nav-link-active,
+        .nav-link-active:hover {{
+            background: var(--primary-gold) !important;
+            color: white !important;
+            -webkit-text-fill-color: white !important;
+        }}
     }}
     </style>
     """,
@@ -937,35 +940,24 @@ def render_header_and_settings(engine: PostseasonSwapEngine):
 
 
 def render_top_navigation():
-    st.markdown('<div class="top-nav">', unsafe_allow_html=True)
     pages = ["Model", "Threats", "Opportunities"]
-    if st.session_state.get("nav_page") not in pages:
-        st.session_state["nav_page"] = st.session_state["active_page"] if st.session_state["active_page"] in pages else "Model"
-    if hasattr(st, "segmented_control"):
-        selected_page = st.segmented_control(
-            "Primary navigation",
-            options=pages,
-            key="nav_page",
-            label_visibility="collapsed",
-            width="stretch",
-        )
-        if selected_page in pages and selected_page != st.session_state["active_page"]:
-            st.session_state["active_page"] = selected_page
-            st.rerun()
-    else:
-        nav_cols = st.columns(3, gap="small")
-        for col, page_name in zip(nav_cols, pages):
-            with col:
-                if st.session_state["active_page"] == page_name:
-                    st.markdown(f'<div class="nav-tab-active">{page_name}</div>', unsafe_allow_html=True)
-                else:
-                    st.markdown('<div class="top-nav-row">', unsafe_allow_html=True)
-                    if st.button(page_name, key=f"nav_{page_name.lower()}"):
-                        st.session_state["active_page"] = page_name
-                        st.session_state["nav_page"] = page_name
-                        st.rerun()
-                    st.markdown("</div>", unsafe_allow_html=True)
-    st.markdown("</div>", unsafe_allow_html=True)
+    requested_page = st.query_params.get("page", st.session_state.get("active_page", "Model"))
+    if isinstance(requested_page, list):
+        requested_page = requested_page[0] if requested_page else "Model"
+    if requested_page not in pages:
+        requested_page = "Model"
+    st.session_state["active_page"] = requested_page
+    st.session_state["nav_page"] = requested_page
+
+    links = []
+    for page_name in pages:
+        active_class = " nav-link-active" if page_name == requested_page else ""
+        links.append(f'<a class="nav-link{active_class}" href="?page={page_name}">{page_name}</a>')
+
+    st.markdown(
+        f'<div class="top-nav"><nav class="nav-strip">{"".join(links)}</nav></div>',
+        unsafe_allow_html=True,
+    )
 
 
 def render_context_rail(engine: PostseasonSwapEngine):
